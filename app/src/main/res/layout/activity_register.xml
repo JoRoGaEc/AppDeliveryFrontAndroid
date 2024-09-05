@@ -18,7 +18,7 @@
          android:textSize="50dp"
          android:layout_marginTop="60dp"
          android:layout_marginLeft="25dp"
-         android:fontFamily="@font/indigo_daisy" />
+         android:fontFamily="@font/playfair_black" />
 
         <TextView
             android:layout_width="wrap_content"

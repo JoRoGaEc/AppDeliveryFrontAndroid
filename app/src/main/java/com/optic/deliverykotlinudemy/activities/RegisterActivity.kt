@@ -1,7 +1,6 @@
 package com.optic.deliverykotlinudemy.activities
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
@@ -9,10 +8,17 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.optic.deliverykotlinudemy.R
+import com.optic.deliverykotlinudemy.models.ResponseHttp
+import com.optic.deliverykotlinudemy.models.User
+import com.optic.deliverykotlinudemy.providers.UsersProvider
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class RegisterActivity : AppCompatActivity() {
-
+    val TAG = "RegisterActivity"
     var imageViewGoToLogin:ImageView? = null
 
     var editTextName: EditText? = null
@@ -24,6 +30,8 @@ class RegisterActivity : AppCompatActivity() {
 
     var buttonRegister: Button?= null
 
+
+    var usersProvider =  UsersProvider()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
@@ -62,7 +70,29 @@ class RegisterActivity : AppCompatActivity() {
                 password =  password,
                 confirmPassword =  confirmPassword
             )){
-            Toast.makeText(this, "Formulario válido", Toast.LENGTH_LONG).show()
+            val  user =  User(
+                name = name,
+                lastname = lastname,
+                email = email,
+                phone = phone,
+                password = password
+            )
+            usersProvider.register(user)?.enqueue(object : Callback<ResponseHttp>{
+                override fun onResponse(
+                    call: Call<ResponseHttp>,
+                    response: Response<ResponseHttp>
+                ) {
+                    Toast.makeText(this@RegisterActivity, response.body()?.message, Toast.LENGTH_LONG).show()
+                    Log.d(TAG, "Response: ${response}")
+                    Log.d(TAG, "Body: ${response.body()}")
+                }
+
+                override fun onFailure(call: Call<ResponseHttp>, t: Throwable) {
+                    Log.d(TAG, "Se produjo un error ${t.message}")
+                    Toast.makeText(this@RegisterActivity, "Se produjo un error ${t.message}", Toast.LENGTH_LONG).show()
+                }
+
+            })
         }else{
             Toast.makeText(this, "Formulario no  válido", Toast.LENGTH_LONG).show()
 
