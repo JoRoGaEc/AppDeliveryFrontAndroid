@@ -9,9 +9,12 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
+import com.google.gson.Gson
 import com.optic.deliverykotlinudemy.R
 import com.optic.deliverykotlinudemy.models.ResponseHttp
+import com.optic.deliverykotlinudemy.models.User
 import com.optic.deliverykotlinudemy.providers.UsersProvider
+import com.optic.deliverykotlinudemy.utils.SharedPref
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -81,6 +84,7 @@ class MainActivity : AppCompatActivity() {
                     Log.d("MainActivity","Response : ${response.body()}")
                     if(response.body()?.success == true){
                         Toast.makeText(this@MainActivity, "Response : ${response.body()?.message}", Toast.LENGTH_LONG).show()
+                        saveUserInSession(response.body()?.data.toString())
                     }else{
                         Toast.makeText(this@MainActivity, "Not valid credentials", Toast.LENGTH_LONG).show()
 
@@ -96,6 +100,13 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this, "Formulario no  válido", Toast.LENGTH_LONG).show()
 
         }
+    }
+
+    private fun saveUserInSession(data: String){
+        val sharePref =SharedPref(this)
+        val gson = Gson()
+        val user =  gson.fromJson(data, User::class.java)
+        sharePref.save("user", user)
     }
 
     fun String.isEmailValid():Boolean{
