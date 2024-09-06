@@ -11,6 +11,7 @@ import android.widget.ImageView
 import android.widget.Toast
 import com.google.gson.Gson
 import com.optic.deliverykotlinudemy.R
+import com.optic.deliverykotlinudemy.activities.client.home.ClientHomeActivity
 import com.optic.deliverykotlinudemy.models.ResponseHttp
 import com.optic.deliverykotlinudemy.models.User
 import com.optic.deliverykotlinudemy.providers.UsersProvider
@@ -20,7 +21,6 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class MainActivity : AppCompatActivity() {
-
     var imageViewGoToRegister: ImageView? = null //NULL SAFETY
     var editTextEmail:  EditText? = null
     var editTextPassword:  EditText? = null
@@ -68,6 +68,11 @@ class MainActivity : AppCompatActivity() {
         buttonLogin?.setOnClickListener{
             login()
         }
+        getUserFromSession()
+    }
+    private fun goToClientHome(){
+        val i =  Intent(this, ClientHomeActivity::class.java)
+        startActivity(i)
     }
 
     private fun login(){
@@ -85,6 +90,7 @@ class MainActivity : AppCompatActivity() {
                     if(response.body()?.success == true){
                         Toast.makeText(this@MainActivity, "Response : ${response.body()?.message}", Toast.LENGTH_LONG).show()
                         saveUserInSession(response.body()?.data.toString())
+                        goToClientHome()
                     }else{
                         Toast.makeText(this@MainActivity, "Not valid credentials", Toast.LENGTH_LONG).show()
 
@@ -99,6 +105,15 @@ class MainActivity : AppCompatActivity() {
         }else{
             Toast.makeText(this, "Formulario no  válido", Toast.LENGTH_LONG).show()
 
+        }
+    }
+    private fun getUserFromSession(){
+        val sharedPref =  SharedPref(this)
+        val gson =  Gson()
+        if(!sharedPref.getData("user").isNullOrBlank()){
+            //The user exist in session
+            val user = gson.fromJson(sharedPref.getData("user"), User::class.java)
+            goToClientHome()
         }
     }
 

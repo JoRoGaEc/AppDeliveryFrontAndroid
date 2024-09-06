@@ -71,7 +71,7 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="20dp"
             android:layout_marginLeft="20dp"
-            android:text="INICIAR SESION"
+            android:text="LOG IN"
             android:layout_marginTop="200dp"
             android:background="@drawable/rounded_button"
             />
