@@ -10,6 +10,11 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
 import com.optic.deliverykotlinudemy.R
+import com.optic.deliverykotlinudemy.models.ResponseHttp
+import com.optic.deliverykotlinudemy.providers.UsersProvider
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class MainActivity : AppCompatActivity() {
 
@@ -18,6 +23,7 @@ class MainActivity : AppCompatActivity() {
     var editTextPassword:  EditText? = null
     var buttonLogin:    Button? = null;
 
+    var usersProvider = UsersProvider()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -67,20 +73,29 @@ class MainActivity : AppCompatActivity() {
 
 
         if(isValidForm(email, password)){
-            Toast.makeText(this, "Formulario válido", Toast.LENGTH_LONG).show()
+            usersProvider.login(email, password)?.enqueue(object: Callback<ResponseHttp>{
+                override fun onResponse(
+                    call: Call<ResponseHttp>,
+                    response: Response<ResponseHttp>
+                ) {
+                    Log.d("MainActivity","Response : ${response.body()}")
+                    if(response.body()?.success == true){
+                        Toast.makeText(this@MainActivity, "Response : ${response.body()?.message}", Toast.LENGTH_LONG).show()
+                    }else{
+                        Toast.makeText(this@MainActivity, "Not valid credentials", Toast.LENGTH_LONG).show()
+
+                    }
+                }
+
+                override fun onFailure(call: Call<ResponseHttp>, t: Throwable) {
+                    Toast.makeText(this@MainActivity, "There was an error", Toast.LENGTH_LONG).show()
+                }
+
+            })
         }else{
             Toast.makeText(this, "Formulario no  válido", Toast.LENGTH_LONG).show()
 
         }
-        /*Los Toast hacen que aparezca en la app*/
-        Toast.makeText(this, "El email es: $email", Toast.LENGTH_LONG).show()
-        Toast.makeText(this, "El pasword es: $password", Toast.LENGTH_LONG).show()
-
-        /*Esto para que imprima en consola*/
-        Log.d("MainActivity","El email es $email")
-        Log.d("MainActivity","El password es $password")
-
-
     }
 
     fun String.isEmailValid():Boolean{
