@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity() {
     var imageViewGoToRegister: ImageView? = null //NULL SAFETY
     var editTextEmail:  EditText? = null
     var editTextPassword:  EditText? = null
-    var buttonLogin:    Button? = null;
+    var buttonLogin:    Button? = null
 
     var usersProvider = UsersProvider()
     override fun onCreate(savedInstanceState: Bundle?) {

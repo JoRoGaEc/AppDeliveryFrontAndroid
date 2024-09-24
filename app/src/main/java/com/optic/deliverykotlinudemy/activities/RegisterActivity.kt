@@ -9,10 +9,13 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.gson.Gson
 import com.optic.deliverykotlinudemy.R
+import com.optic.deliverykotlinudemy.activities.client.home.ClientHomeActivity
 import com.optic.deliverykotlinudemy.models.ResponseHttp
 import com.optic.deliverykotlinudemy.models.User
 import com.optic.deliverykotlinudemy.providers.UsersProvider
+import com.optic.deliverykotlinudemy.utils.SharedPref
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -82,6 +85,10 @@ class RegisterActivity : AppCompatActivity() {
                     call: Call<ResponseHttp>,
                     response: Response<ResponseHttp>
                 ) {
+                    if(response.body()?.success == true){
+                        saveUserInSession(response.body()?.data.toString())
+                        goToClientHome()
+                    }
                     Toast.makeText(this@RegisterActivity, response.body()?.message, Toast.LENGTH_LONG).show()
                     Log.d(TAG, "Response: ${response}")
                     Log.d(TAG, "Body: ${response.body()}")
@@ -114,6 +121,16 @@ class RegisterActivity : AppCompatActivity() {
         Log.d("MainActivity","El password es $password")
         Log.d("MainActivity","El confirmPassword es $confirmPassword")
 
+    }
+    private fun goToClientHome(){
+        val i =  Intent(this, ClientHomeActivity::class.java)
+        startActivity(i)
+    }
+    private fun saveUserInSession(data: String){
+        val sharePref = SharedPref(this)
+        val gson = Gson()
+        val user =  gson.fromJson(data, User::class.java)
+        sharePref.save("user", user)
     }
     fun String.isEmailValid():Boolean{
         return !TextUtils.isEmpty(this) && android.util.Patterns.EMAIL_ADDRESS.matcher(this).matches();
