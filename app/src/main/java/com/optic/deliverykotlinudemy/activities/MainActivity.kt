@@ -75,6 +75,10 @@ class MainActivity : AppCompatActivity() {
         startActivity(i)
     }
 
+    private fun goToSelectRoles(){
+        val i =  Intent(this, SelectRolesActivity::class.java)
+        startActivity(i)
+    }
     private fun login(){
         val email = editTextEmail?.text.toString()
         val password = editTextPassword?.text.toString()
@@ -90,7 +94,6 @@ class MainActivity : AppCompatActivity() {
                     if(response.body()?.success == true){
                         Toast.makeText(this@MainActivity, "Response : ${response.body()?.message}", Toast.LENGTH_LONG).show()
                         saveUserInSession(response.body()?.data.toString())
-                        goToClientHome()
                     }else{
                         Toast.makeText(this@MainActivity, "Not valid credentials", Toast.LENGTH_LONG).show()
 
@@ -122,6 +125,12 @@ class MainActivity : AppCompatActivity() {
         val gson = Gson()
         val user =  gson.fromJson(data, User::class.java)
         sharePref.save("user", user)
+
+        if(user.roles?.size!! >1){
+            goToSelectRoles()
+        }else{ //SOLO TIENE UN ROL (ROL CLIENTE)
+            goToClientHome()
+        }
     }
 
     fun String.isEmailValid():Boolean{
