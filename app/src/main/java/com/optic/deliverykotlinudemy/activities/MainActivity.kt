@@ -127,7 +127,11 @@ class MainActivity : AppCompatActivity() {
         sharePref.save("user", user)
 
         if(user.roles?.size!! >1){
-            goToSelectRoles()
+            try {
+                goToSelectRoles()
+            }catch (e: Exception){
+                Log.e("MainActivity", "Ocurrió un error: ${e.message}")
+            }
         }else{ //SOLO TIENE UN ROL (ROL CLIENTE)
             goToClientHome()
         }

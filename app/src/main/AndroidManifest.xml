@@ -14,7 +14,7 @@
         android:theme="@style/Theme.DeliveryKotlinUdemy"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".SelectRolesActivity"
+            android:name=".activities.SelectRolesActivity"
             android:exported="false" />
         <activity
             android:name=".activities.client.home.ClientHomeActivity"
