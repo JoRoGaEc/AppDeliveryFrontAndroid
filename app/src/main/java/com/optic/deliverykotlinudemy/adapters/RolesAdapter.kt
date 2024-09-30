@@ -1,6 +1,7 @@
 package com.optic.deliverykotlinudemy.adapters
 
 import android.app.Activity
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,9 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.optic.deliverykotlinudemy.R
+import com.optic.deliverykotlinudemy.activities.client.home.ClientHomeActivity
+import com.optic.deliverykotlinudemy.activities.delivery.home.DeliveryHomeActivity
+import com.optic.deliverykotlinudemy.activities.restaurant.home.RestaurantHomeActivity
 import com.optic.deliverykotlinudemy.models.Rol
 
 class RolesAdapter(val context: Activity, val roles:ArrayList<Rol>): RecyclerView.Adapter<RolesAdapter.RolesViewHolder>(){
@@ -26,6 +30,24 @@ class RolesAdapter(val context: Activity, val roles:ArrayList<Rol>): RecyclerVie
         val rol =  roles[position]
         holder.textViewRol.text =  rol.name
         Glide.with(context).load(rol.image).into(holder.imageViewRol)
+
+        holder.itemView.setOnClickListener{
+            goToRol(rol)
+        }
+    }
+
+    private fun goToRol(rol: Rol){
+            if(rol.name == "RESTAURANTE"){
+                val i = Intent(context, RestaurantHomeActivity::class.java)
+                context.startActivity(i)
+            }else  if(rol.name == "CLIENTE"){
+                val i = Intent(context, ClientHomeActivity::class.java)
+                context.startActivity(i)
+            }else if(rol.name == "REPARTIDOR"){
+                val i = Intent(context, DeliveryHomeActivity::class.java)
+                context.startActivity(i)
+            }
+
     }
 
 

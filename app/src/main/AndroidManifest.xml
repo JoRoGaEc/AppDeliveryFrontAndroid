@@ -14,6 +14,12 @@
         android:theme="@style/Theme.DeliveryKotlinUdemy"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".activities.delivery.home.DeliveryHomeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.restaurant.home.RestaurantHomeActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.SelectRolesActivity"
             android:exported="false" />
         <activity
