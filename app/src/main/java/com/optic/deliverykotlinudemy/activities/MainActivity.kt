@@ -12,6 +12,8 @@ import android.widget.Toast
 import com.google.gson.Gson
 import com.optic.deliverykotlinudemy.R
 import com.optic.deliverykotlinudemy.activities.client.home.ClientHomeActivity
+import com.optic.deliverykotlinudemy.activities.delivery.home.DeliveryHomeActivity
+import com.optic.deliverykotlinudemy.activities.restaurant.home.RestaurantHomeActivity
 import com.optic.deliverykotlinudemy.models.ResponseHttp
 import com.optic.deliverykotlinudemy.models.User
 import com.optic.deliverykotlinudemy.providers.UsersProvider
@@ -72,11 +74,22 @@ class MainActivity : AppCompatActivity() {
     }
     private fun goToClientHome(){
         val i =  Intent(this, ClientHomeActivity::class.java)
+        i.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK //DELETE SCREEN HISTORY
         startActivity(i)
     }
-
+    private fun goToRestaurantHome(){
+        val i =  Intent(this, RestaurantHomeActivity::class.java)
+        i.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK //DELETE SCREEN HISTORY
+        startActivity(i)
+    }
+    private fun goToDeliveryHome(){
+        val i =  Intent(this, DeliveryHomeActivity::class.java)
+        i.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK //DELETE SCREEN HISTORY
+        startActivity(i)
+    }
     private fun goToSelectRoles(){
         val i =  Intent(this, SelectRolesActivity::class.java)
+        i.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK //DELETE SCREEN HISTORY
         startActivity(i)
     }
     private fun login(){
@@ -116,7 +129,23 @@ class MainActivity : AppCompatActivity() {
         if(!sharedPref.getData("user").isNullOrBlank()){
             //The user exist in session
             val user = gson.fromJson(sharedPref.getData("user"), User::class.java)
-            goToClientHome()
+
+            if(!sharedPref.getData("rol").isNullOrBlank()){
+                //SI EL USUARIO SELECCIONO EL ROL.
+                val rol = sharedPref.getData("rol")?.replace("\"","")
+
+                if(rol ==  "RESTAURANTE"){
+                    goToRestaurantHome()
+                }else if(rol == "CLIENTE"){
+                    goToClientHome()
+                }else if(rol == "REPARTIDOR"){
+                    goToDeliveryHome()
+                }
+            }
+            else{
+                goToClientHome()
+            }
+
         }
     }
 

@@ -14,8 +14,11 @@ import com.optic.deliverykotlinudemy.activities.client.home.ClientHomeActivity
 import com.optic.deliverykotlinudemy.activities.delivery.home.DeliveryHomeActivity
 import com.optic.deliverykotlinudemy.activities.restaurant.home.RestaurantHomeActivity
 import com.optic.deliverykotlinudemy.models.Rol
+import com.optic.deliverykotlinudemy.utils.SharedPref
 
 class RolesAdapter(val context: Activity, val roles:ArrayList<Rol>): RecyclerView.Adapter<RolesAdapter.RolesViewHolder>(){
+
+    val sharedPref =  SharedPref(context)
 
     override fun onCreateViewHolder(parent:ViewGroup, viewType: Int): RolesViewHolder {
         val view  =  LayoutInflater.from(parent.context).inflate(R.layout.cardview_roles, parent, false)
@@ -38,12 +41,15 @@ class RolesAdapter(val context: Activity, val roles:ArrayList<Rol>): RecyclerVie
 
     private fun goToRol(rol: Rol){
             if(rol.name == "RESTAURANTE"){
+                sharedPref.save("rol", "RESTAURANTE")
                 val i = Intent(context, RestaurantHomeActivity::class.java)
                 context.startActivity(i)
             }else  if(rol.name == "CLIENTE"){
+                sharedPref.save("rol", "CLIENTE")
                 val i = Intent(context, ClientHomeActivity::class.java)
                 context.startActivity(i)
             }else if(rol.name == "REPARTIDOR"){
+                sharedPref.save("rol", "REPARTIDOR")
                 val i = Intent(context, DeliveryHomeActivity::class.java)
                 context.startActivity(i)
             }
